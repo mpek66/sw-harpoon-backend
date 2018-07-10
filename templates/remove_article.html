@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Remove Article Page</title>
+    </head>
+    <body>
+        <form action="{{ url_for('manager.remove_article') }}" method="post">
+            <h1>Article ID</h1>
+              <input type="number" name="id" />
+            <h1>Credential Data</h1>
+              <p>Name</p>
+              <input type="text" name="name" />
+              <p>Password</p>
+              <input type="password" name="password" />
+            {{ form.csrf_token }}
+            </br></br>
+            <button type="submit">Submit</button>
+        </form>
+        <form action="/manage/">
+          <h1>Cancel</h1>
+          <button>Back to Manage</button>
+        </form>
+    </body>
+</html>
