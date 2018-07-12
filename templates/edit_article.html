@@ -6,21 +6,21 @@
         <form action="{{ url_for('manager.edit_article') }}" method="post">
             <h1>Article ID</h1>
               <input type="number" name="id" />
-            <h1>Article Data</h1>
-              <p>Title</p>
-              <input type="text" name="title" />
-              <p>Date</p>
-              <input type="text" name="date" />
-              <p>Author</p>
-              <input type="text" name="author" />
-              <p>Image</p>
-              <input type="text" name="image" />
-              <p>Caption</p>
-              <input type="text" name="caption" />
-              <p>Location</p>
-              <input type="text" name="location" />
-              <p>Article</p>
-              <input type="text" name="article" />
+              <h1>Article Data</h1>
+                <p>Title</p>
+                <input type="text" name="title" />
+                <p>Date</p>
+                <input type="text" name="date" />
+                <p>Author</p>
+                <input type="text" name="author" />
+                <p>Image</p>
+                <textarea name="image"></textarea>
+                <p>Caption</p>
+                <input type="text" name="caption" />
+                <p>Location</p>
+                <input type="text" name="location" />
+                <p>Article</p>
+                <textarea name="article"></textarea>
             <h1>Meta Data</h2>
               <p>Category</p>
               <input type="radio" name="category" value="culture">Culture
