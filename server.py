@@ -146,7 +146,7 @@ def add_article(form):
     repo = Repo(".")
     repo.git.add(".")
     repo.git.commit("-m ADD " + data["title"])
-    repo.git.push("origin", "HEAD:refs/for/master")
+    repo.git.push("origin")
     """
     repo = Repo(".")
     to_add = [ item.a_path for item in repo.index.diff(None) ]
@@ -315,7 +315,7 @@ def remove_article(form):
     repo = Repo(".")
     repo.git.add(".")
     repo.git.commit("-m REMOVE " + data["title"])
-    repo.git.push("origin", "HEAD:refs/for/master")
+    repo.git.push("origin")
 
     if len(errors) == 0:
         return "SUCCESS"
