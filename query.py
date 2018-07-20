@@ -1,6 +1,8 @@
-from flask import jsonify
+from flask import Blueprint, jsonify, Flask, redirect, request, url_for, render_template
 import os
 import server
+
+fetcher = Blueprint("fetcher", __name__, template_folder='templates')
 
 def get(id, key):
     try:
@@ -12,7 +14,7 @@ def get(id, key):
         print("ERROR: querying article with id " + id + " for " + key)
         return "ERROR: querying article with id " + id + " for " + key
 
-def view_articles():
+def get_article_titles():
     try:
         realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
         ids = []
@@ -64,3 +66,20 @@ def get_articles_by(type, value):
         status = "ERROR: can't get articles by " + type + " with value " + value
 
     return jsonify(status=status, articles=articles)
+
+@fetcher.route("/view_articles/", methods=["GET", "POST"])
+def view_articles():
+    articles = get_article_titles()
+    return render_template("/view_articles.html", articles=articles)
+
+# routes to get shit
+@fetcher.route("/get_article/<string:id>/", methods=["GET"])
+def get_article(id):
+    return jsonify(get_article(id))
+
+# route to get articles
+@fetcher.route("/get_articles/<string:type>/<string:value>/")
+def get_articles(type, value):
+    if type not in ["time", "authors", "categories", "scopes"]:
+        return jsonify(status="ERROR: can't get articles of type " + type)
+    return get_articles_by(type, value)

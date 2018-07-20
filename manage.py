@@ -3,7 +3,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 import server
-import query
 
 manager = Blueprint("manager", __name__, template_folder='templates')
 
@@ -48,11 +47,6 @@ def get_credential_password():
 @manager.route("/manage/", methods=["GET", "POST"])
 def manage():
     return render_template("/manage.html")
-
-@manager.route("/view_articles/", methods=["GET", "POST"])
-def view_articles():
-    articles = query.view_articles()
-    return render_template("/view_articles.html", articles=articles)
 
 @manager.route("/add_article/", methods=["GET", "POST"])
 def add_article():
@@ -101,15 +95,3 @@ def success():
 def errors():
     problems = request.args.get("errors")
     return render_template("/errors.html", errors=problems)
-
-# routes to get shit
-@manager.route("/get_article/<string:id>/", methods=["GET"])
-def get_article(id):
-    return jsonify(query.get_article(id))
-
-# route to get articles
-@manager.route("/get_articles/<string:type>/<string:value>/")
-def get_articles(type, value):
-    if type not in ["time", "authors", "categories", "scopes"]:
-        return jsonify(status="ERROR: can't get articles of type " + type)
-    return query.get_articles_by(type, value)
