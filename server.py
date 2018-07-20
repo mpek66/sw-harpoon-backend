@@ -143,20 +143,14 @@ def add_article(form):
     except:
         errors.append("ERROR: adding to scopes folder")
 
-    repo = Repo("..")
-    repo.git.add(".")
-    repo.git.commit("-m ADD " + data["title"])
-    repo.git.push("origin")
-    #repo.git.push("heroku", "master")
-    """
-    repo = Repo(".")
-    to_add = [ item.a_path for item in repo.index.diff(None) ]
-    to_add += repo.untracked_files
-    index = repo.index
-    index.add(to_add)
-    new_commit = index.commit("ADD " + data["title"])
-    origin = repo.remotes.origin
-    origin.push()"""
+    try:
+        repo = Repo("..")
+        repo.git.add(".")
+        repo.git.commit("-m ADD " + data["title"])
+        repo.git.push("origin")
+        repo.git.push("heroku", "master")
+    except:
+        errors.append("ERROR: couldn't add to git")
 
     if len(errors) == 0:
         return "SUCCESS"
@@ -202,6 +196,15 @@ def edit_article(form):
                 fin.write(data[key])
     except:
         errors.append("ERROR: writing data to article folder")
+
+    try:
+        repo = Repo("..")
+        repo.git.add(".")
+        repo.git.commit("-m EDIT " + data["title"])
+        repo.git.push("origin")
+        repo.git.push("heroku", "master")
+    except:
+        errors.append("ERROR: couldn't add to git")
 
     if len(errors) == 0:
         return "SUCCESS"
@@ -313,10 +316,14 @@ def remove_article(form):
     except:
         errors.append("ERROR: deleting article directory")
 
-    repo = Repo(".")
-    repo.git.add(".")
-    repo.git.commit("-m REMOVE " + data["title"])
-    repo.git.push("origin")
+    try:
+        repo = Repo("..")
+        repo.git.add(".")
+        repo.git.commit("-m REMOVE " + data["title"])
+        repo.git.push("origin")
+        repo.git.push("heroku", "master")
+    except:
+        errors.append("ERROR: couldn't add to git")
 
     if len(errors) == 0:
         return "SUCCESS"
