@@ -306,6 +306,15 @@ def remove_article(form):
     except:
         errors.append("ERROR: deleting article directory")
 
+    repo = Repo(".")
+    to_add = [ item.a_path for item in repo.index.diff(None) ]
+    to_add += repo.untracked_files
+    index = repo.index
+    index.add(to_add)
+    new_commit = index.commit("ADD " + data["title"])
+    origin = repo.remotes.origin
+    origin.push()
+
     if len(errors) == 0:
         return "SUCCESS"
     else:
