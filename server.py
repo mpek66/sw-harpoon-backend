@@ -144,13 +144,18 @@ def add_article(form):
         errors.append("ERROR: adding to scopes folder")
 
     repo = Repo(".")
+    repo.git.add(".")
+    repo.git.commit("-m ADD " + data["title"])
+    repo.git.push("origin", "HEAD:refs/for/master")
+    """
+    repo = Repo(".")
     to_add = [ item.a_path for item in repo.index.diff(None) ]
     to_add += repo.untracked_files
     index = repo.index
     index.add(to_add)
     new_commit = index.commit("ADD " + data["title"])
     origin = repo.remotes.origin
-    origin.push()
+    origin.push()"""
 
     if len(errors) == 0:
         return "SUCCESS"
@@ -305,15 +310,6 @@ def remove_article(form):
         shutil.rmtree(realpath+"/articles/" + id)
     except:
         errors.append("ERROR: deleting article directory")
-
-    repo = Repo(".")
-    to_add = [ item.a_path for item in repo.index.diff(None) ]
-    to_add += repo.untracked_files
-    index = repo.index
-    index.add(to_add)
-    new_commit = index.commit("ADD " + data["title"])
-    origin = repo.remotes.origin
-    origin.push()
 
     if len(errors) == 0:
         return "SUCCESS"
