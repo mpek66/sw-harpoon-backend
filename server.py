@@ -148,7 +148,7 @@ def add_article(form):
     print("before")
     repo.index.add("*")
     repo.index.commit("ADD " + data["title"])
-    repo.index.push("origin", "master")
+    repo.git.push("origin", "master")
     print("here")
 
     if len(errors) == 0:
