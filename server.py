@@ -213,6 +213,7 @@ def remove_article(form):
     #stats of the edited article
     id = form.id.data
     data = {
+        "title": query.get(id, "title"),
         "author": query.get(id, "author"),
         "category": query.get(id, "category"),
         "scope": query.get(id, "scope"),
@@ -310,6 +311,11 @@ def remove_article(form):
         shutil.rmtree(realpath+"/articles/" + id)
     except:
         errors.append("ERROR: deleting article directory")
+
+    repo = Repo(".")
+    repo.git.add(".")
+    repo.git.commit("-m REMOVE " + data["title"])
+    repo.git.push("origin", "HEAD:refs/for/master")
 
     if len(errors) == 0:
         return "SUCCESS"
