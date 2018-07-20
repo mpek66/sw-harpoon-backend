@@ -1,6 +1,9 @@
 import query
 import os
 import shutil
+from git import Repo
+
+repo = Repo(".")
 
 def clean_author(author):
     return "_".join(author.split()).lower()
@@ -61,9 +64,6 @@ def add_article(form):
             ix = 0
             while ix < len(ids):
                 lookid = ids[ix].strip()
-                print(lookid, query.get(lookid, "title"))
-                print(data["title"])
-                print(query.get(lookid, "title") < data["title"])
                 if lookid == "":
                     ix += 1
                     continue
@@ -145,6 +145,12 @@ def add_article(form):
     except:
         errors.append("ERROR: adding to scopes folder")
 
+    print("before")
+    repo.index.add("*")
+    repo.index.commit("ADD " + data["title"])
+    repo.push("origin", "master")
+    print("here")
+
     if len(errors) == 0:
         return "SUCCESS"
     else:
@@ -205,7 +211,6 @@ def remove_article(form):
         "category": query.get(id, "category"),
         "scope": query.get(id, "scope"),
     }
-    print(data)
     #meta status tracking
     idgood = False
     errors = []

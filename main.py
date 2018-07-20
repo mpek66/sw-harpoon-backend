@@ -6,4 +6,4 @@ app.register_blueprint(manager)
 app.secret_key = "lkj()984kljl;:LKJF?.a<faskdjkl"
 
 if __name__ == "__main__":
-    app.run(threaded=True)
+    app.run(threaded=True, debug=True)
