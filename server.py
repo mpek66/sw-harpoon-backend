@@ -3,8 +3,6 @@ import os
 import shutil
 from git import Repo
 
-repo = Repo(".")
-
 def clean_author(author):
     return "_".join(author.split()).lower()
 
@@ -145,11 +143,14 @@ def add_article(form):
     except:
         errors.append("ERROR: adding to scopes folder")
 
-    print("before")
-    repo.index.add("*")
-    repo.index.commit("ADD " + data["title"])
-    repo.git.push("origin", "master")
-    print("here")
+    repo = Repo(".")
+    to_add = [ item.a_path for item in repo.index.diff(None) ]
+    to_add += repo.untracked_files
+    index = repo.index
+    index.add(to_add)
+    new_commit = index.commit("ADD " + data["title"])
+    origin = repo.remotes.origin
+    origin.push()
 
     if len(errors) == 0:
         return "SUCCESS"
