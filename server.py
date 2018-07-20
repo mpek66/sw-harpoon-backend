@@ -143,11 +143,11 @@ def add_article(form):
     except:
         errors.append("ERROR: adding to scopes folder")
 
-    repo = Repo(".")
+    repo = Repo("..")
     repo.git.add(".")
     repo.git.commit("-m ADD " + data["title"])
     repo.git.push("origin")
-    repo.git.push("heroku", "master")
+    #repo.git.push("heroku", "master")
     """
     repo = Repo(".")
     to_add = [ item.a_path for item in repo.index.diff(None) ]
