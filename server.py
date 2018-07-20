@@ -147,6 +147,7 @@ def add_article(form):
     repo.git.add(".")
     repo.git.commit("-m ADD " + data["title"])
     repo.git.push("origin")
+    repo.git.push("heroku", "master")
     """
     repo = Repo(".")
     to_add = [ item.a_path for item in repo.index.diff(None) ]
