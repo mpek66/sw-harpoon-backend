@@ -45,7 +45,6 @@ def get_credential_name():
 def get_credential_password():
     return "test"
 
-@manager.route("/", methods=["GET", "POST"])
 @manager.route("/manage/", methods=["GET", "POST"])
 def manage():
     return render_template("/manage.html")
