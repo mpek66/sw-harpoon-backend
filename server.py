@@ -144,7 +144,7 @@ def add_article(form):
         errors.append("ERROR: adding to scopes folder")
 
     try:
-        repo = Repo("..")
+        repo = Repo(".")
         repo.git.add(".")
         repo.git.commit("-m ADD " + data["title"])
         repo.git.push("origin")
@@ -198,7 +198,7 @@ def edit_article(form):
         errors.append("ERROR: writing data to article folder")
 
     try:
-        repo = Repo("..")
+        repo = Repo(".")
         repo.git.add(".")
         repo.git.commit("-m EDIT " + data["title"])
         repo.git.push("origin")
@@ -317,7 +317,7 @@ def remove_article(form):
         errors.append("ERROR: deleting article directory")
 
     try:
-        repo = Repo("..")
+        repo = Repo(".")
         repo.git.add(".")
         repo.git.commit("-m REMOVE " + data["title"])
         repo.git.push("origin")
