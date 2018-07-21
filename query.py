@@ -10,9 +10,9 @@ def get(id, key):
         idpath = realpath + "/articles/" + id
         with open(idpath + "/" + key + ".txt", "r+") as fin:
             return fin.read()
-    except:
-        print("ERROR: querying article with id " + id + " for " + key)
-        return "ERROR: querying article with id " + id + " for " + key
+    except Exception as e:
+        print("ERROR: querying article with id " + id + " for " + key, e, )
+        return "ERROR: querying article with id " + id + " for " + key + ", " + str(e)
 
 def get_article_titles():
     try:
