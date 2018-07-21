@@ -59,6 +59,8 @@ def get_articles_by(type, value):
                 for line in fin:
                     articles.append(get_article(line.strip()))
         else:
+            if type == "authors":
+                value = server.clean_author(value)
             with open(realpath + "/" + type + "/" + value + "/articles.txt", "r+") as fin:
                 for line in fin:
                     articles.append(get_article(line.strip()))
@@ -74,12 +76,12 @@ def view_articles():
 
 # routes to get shit
 @fetcher.route("/get_article/<string:id>/", methods=["GET"])
-def get_article(id):
+def get_article_data(id):
     return jsonify(get_article(id))
 
 # route to get articles
-@fetcher.route("/get_articles/<string:type>/<string:value>/")
-def get_articles(type, value):
+@fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
+def get_articles_data(type, value):
     if type not in ["time", "authors", "categories", "scopes"]:
         return jsonify(status="ERROR: can't get articles of type " + type)
     return get_articles_by(type, value)
