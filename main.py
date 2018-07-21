@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, jsonify, request
 from manage import manager
 from query import fetcher, get_article_titles
+from git import Repo
 
 app = Flask(__name__, static_url_path="/static")
 
@@ -13,5 +14,7 @@ def view_only():
     return render_template("/view_only.html", articles=articles)
 
 if __name__ == "__main__":
+    repo = Repo(".")
+    repo.git.pull()
     app.register_blueprint(manager)
     app.run(threaded=True, debug=True)
