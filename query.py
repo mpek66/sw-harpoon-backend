@@ -69,6 +69,29 @@ def get_articles_by(type, value):
 
     return jsonify(status=status, articles=articles)
 
+def get_options(type):
+    status = "SUCCESS"
+    options = []
+    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
+
+    try:
+        if type.lower() == "time":
+            options = ["Weekly", "Monthly", "Yearly", "All Time"]
+        else:
+            type = type.lower()
+            with open(realpath + "/" + type + "/" + type + ".txt", "r+") as fin:
+                for line in fin:
+                    raw = line.strip()
+                    words = raw.split("_")
+                    result = ""
+                    for word in words[:-1]:
+                        result += word[0].upper() + word[1:] + " "
+                    result += words[-1][0].upper() + words[-1][1:]
+                    options.append(result)
+    except Exception as e:
+        status = "ERROR: can't get options by " + type
+    return jsonify(status=status, options=options)
+
 @fetcher.route("/view_articles/", methods=["GET", "POST"])
 def view_articles():
     articles = get_article_titles()
@@ -85,3 +108,10 @@ def get_articles_data(type, value):
     if type not in ["time", "authors", "categories", "scopes"]:
         return jsonify(status="ERROR: can't get articles of type " + type)
     return get_articles_by(type, value)
+
+#route to get options for a browse search
+@fetcher.route("/get_options/<string:type>/", methods=["GET"])
+def get_options_data(type):
+    if type not in ["time", "authors", "categories", "scopes"]:
+        return jsonify(status="ERROR: can't get options of type " + type)
+    return get_options(type)

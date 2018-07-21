@@ -119,7 +119,7 @@ def add_article(form):
         if not os.path.exists(authorpath):
             os.makedirs(authorpath)
             with open(realpath + "/authors/authors.txt", "a") as fin:
-                fin.write(cleanauthor)
+                fin.write(cleanauthor + "\n")
         with open(authorpath + "/name.txt", "w+") as fin:
             fin.write(data["author"])
         with open(authorpath + "/articles.txt", "a+") as fin:
