@@ -9,7 +9,7 @@ def get(id, key):
         realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
         idpath = realpath + "/articles/" + id
         with open(idpath + "/" + key + ".txt", "r+") as fin:
-            return fin.read().encode('utf-8').strip()
+            return str(fin.read().encode('utf-8').strip())
     except Exception as e:
         print("ERROR: querying article with id " + id + " for " + key, e, )
         return "ERROR: querying article with id " + id + " for " + key + ", " + str(e)
