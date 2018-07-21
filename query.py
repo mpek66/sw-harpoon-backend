@@ -7,7 +7,6 @@ fetcher = Blueprint("fetcher", __name__, template_folder='templates')
 def get(id, key):
     try:
         realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
-        return "I got here"
         idpath = realpath + "/articles/" + id
         with open(idpath + "/" + key + ".txt", "r+") as fin:
             return "I really go here"
