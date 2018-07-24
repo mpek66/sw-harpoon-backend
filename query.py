@@ -67,7 +67,7 @@ def get_articles_by(type, value):
     except Exception as e:
         status = "ERROR: can't get articles by " + type + " with value " + value
 
-    return jsonify(status=status, articles=articles)
+    return jsonify(status=status, articles=articles[::-1])
 
 def get_options(type):
     status = "SUCCESS"
