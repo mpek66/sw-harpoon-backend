@@ -21,7 +21,6 @@ def get_article_titles():
         with open(realpath + "/all/ids.txt", "r") as fin:
             for line in fin:
                 ids.append(line.strip())
-        print(ids)
         result = []
         for id in ids:
             title = get(id, "title")
