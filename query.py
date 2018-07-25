@@ -114,3 +114,22 @@ def get_options_data(type):
     if type not in ["time", "authors", "categories", "scopes"]:
         return jsonify(status="ERROR: can't get options of type " + type)
     return get_options(type)
+
+#route to get articles sorted by title
+@fetcher.route("/get_ordered_titles/", methods=["GET"])
+def get_ordered_titles():
+    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
+    result = []
+    status = "SUCCESS"
+    try:
+        with open(realpath + "/all/title_ordered.txt", "r+") as fin:
+            for line in fin:
+                id = line.strip()
+                data = {
+                    "id": id,
+                    "title": get(id, "title")
+                }
+                result.append(data)
+    except Exception as e:
+        status = "ERROR: can't fetch articles by title"
+    return jsonify(result=result, status=status)
