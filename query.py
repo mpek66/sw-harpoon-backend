@@ -125,11 +125,7 @@ def get_ordered_titles():
         with open(realpath + "/all/title_ordered.txt", "r+") as fin:
             for line in fin:
                 id = line.strip()
-                data = {
-                    "id": id,
-                    "title": get(id, "title")
-                }
-                result.append(data)
+                result.append(get_article(id))
     except Exception as e:
         status = "ERROR: can't fetch articles by title"
-    return jsonify(result=result, status=status)
+    return jsonify(articles=result, status=status)
