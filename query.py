@@ -147,7 +147,7 @@ def load_app():
     status = "SUCCESS"
 
     try:
-        data["articles"] = get_articles_by("time", "null")
+        data["articles"] = get_articles_by("time", "null")[1]
     except Exception as e:
         status = "ERROR: can't fetch time ordered articles"
 
