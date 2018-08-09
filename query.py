@@ -49,8 +49,8 @@ def get_article(id):
 def get_articles_by(type, value):
     #utility for accessing files
     realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
-    articles = []
     status = "SUCCESS"
+    articles = []
 
     try:
         if type == "time":
@@ -66,12 +66,12 @@ def get_articles_by(type, value):
     except Exception as e:
         status = "ERROR: can't get articles by " + type + " with value " + value
 
-    return jsonify(status=status, articles=articles[::-1])
+    return (status, articles[::-1])
 
-def get_options(type):
+def get_options_data(type):
+    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
     status = "SUCCESS"
     options = []
-    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
 
     try:
         if type.lower() == "time":
@@ -89,7 +89,24 @@ def get_options(type):
                     options.append(result)
     except Exception as e:
         status = "ERROR: can't get options by " + type
-    return jsonify(status=status, options=options)
+    return status, options
+
+def get_ordered_titles_data():
+    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
+    result = []
+    status = "SUCCESS"
+    try:
+        with open(realpath + "/all/title_ordered.txt", "r+") as fin:
+            for line in fin:
+                id = line.strip()
+                pair = {
+                    "id": id,
+                    "title": get(id, "title")
+                }
+                result.append(pair)
+    except Exception as e:
+        status = "ERROR: can't fetch articles by title"
+    return (status, result)
 
 @fetcher.route("/view_articles/", methods=["GET", "POST"])
 def view_articles():
@@ -103,29 +120,46 @@ def get_article_data(id):
 
 # route to get articles
 @fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
-def get_articles_data(type, value):
+def get_articles(type, value):
     if type not in ["time", "authors", "categories", "scopes"]:
         return jsonify(status="ERROR: can't get articles of type " + type)
-    return get_articles_by(type, value)
+    (status, articles) = get_articles_by(type, value)
+    return jsonify(status=status, articles=articles)
 
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
-def get_options_data(type):
+def get_options(type):
     if type not in ["time", "authors", "categories", "scopes"]:
         return jsonify(status="ERROR: can't get options of type " + type)
-    return get_options(type)
+    (status, options) = get_options_data(type)
+    return jsonify(status=status, options=options)
 
 #route to get articles sorted by title
 @fetcher.route("/get_ordered_titles/", methods=["GET"])
 def get_ordered_titles():
-    realpath = os.path.dirname(os.path.realpath(__file__))+"/static"
-    result = []
+    (status, result) = get_ordered_titles_data()
+    return jsonify(status=status, result=result)
+
+#the "clutch" call
+@fetcher.route("/load_app/", methods=["GET"])
+def load_app():
+    data = {}
     status = "SUCCESS"
+
     try:
-        with open(realpath + "/all/title_ordered.txt", "r+") as fin:
-            for line in fin:
-                id = line.strip()
-                result.append(get_article(id))
+        data["articles"] = get_articles_by("time", "null")
     except Exception as e:
-        status = "ERROR: can't fetch articles by title"
-    return jsonify(articles=result, status=status)
+        status = "ERROR: can't fetch time ordered articles"
+
+    try:
+        data["titles"] = get_ordered_titles_data()[1]
+    except Exception as e:
+        status = "ERROR: can't fetch ordered titles"
+
+    try:
+        for option in ["time", "authors", "categories", "scopes"]:
+            data[option] = get_options_data(option)[1]
+    except Exception as e:
+        status = "ERROR: can't fetch browsing options"
+
+    return jsonify(status=status, data=data)

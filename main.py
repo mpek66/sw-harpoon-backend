@@ -15,6 +15,10 @@ def view_only():
 
 if __name__ == "__main__":
     repo = Repo(".")
-    repo.git.pull()
+    #REMOVE LATER, WE WANT IT TO CRASH WITHOUT ABILITY TO PULL
+    try:
+        repo.git.pull()
+    except Exception as e:
+        print(e, type(e))
     app.register_blueprint(manager)
     app.run(threaded=True, debug=True)
