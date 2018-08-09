@@ -149,8 +149,9 @@ def add_article(form):
         repo.git.commit("-m ADD " + data["title"])
         repo.git.push("origin")
         repo.git.push("heroku", "master")
-    except:
+    except Exception as e:
         errors.append("ERROR: couldn't add to git")
+        print(e, type(e))
 
     if len(errors) == 0:
         return "SUCCESS"
