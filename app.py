@@ -42,7 +42,8 @@ class Article(db.Model):
         self.category = data['category']
         self.scope = data['scope']
 
-#managing articles in the database
+#------------------------------------------------------------------------------#
+#Database management
 manager = Blueprint("manager", __name__, template_folder='templates')
 def get_credential_name():
     return "test"
@@ -52,11 +53,6 @@ def get_credential_password():
 @manager.route("/manage/", methods=["GET", "POST"])
 def manage():
     return render_template("/manage.html")
-
-@manager.route("/view_articles/")
-def view_articles():
-    data = Article.query.order_by(Article.id).all()
-    return render_template("view_articles.html", articles=data)
 
 @manager.route("/add_article/", methods=["GET", "POST"])
 def add_article():
@@ -134,6 +130,92 @@ def errors():
     return render_template("/errors.html", errors=problems)
 
 app.register_blueprint(manager)
+
+#------------------------------------------------------------------------------#
+#Data fetching
+fetcher = Blueprint("fetcher", __name__, template_folder='templates')
+
+@fetcher.route("/view_articles/")
+def view_articles():
+    data = Article.query.order_by(Article.id).all()
+    return render_template("view_articles.html", articles=data)
+
+# routes to get shit
+@fetcher.route("/get_article/<string:id>/", methods=["GET"])
+def get_article_data(id):
+    result = {
+        "status": None,
+        "data": None
+    }
+    try:
+        num = float(id)
+        article = Article.query.get(id)
+        result["status"] = "SUCCESS"
+        result["data"] = {
+            "status": "SUCCESS",
+            "id": article.id,
+            "title": article.title,
+            "date": article.date,
+            "author": article.author,
+            "image": article.image,
+            "caption": article.caption,
+            "article": article.article,
+            "category": article.category,
+            "scope": article.scope
+        }
+    except Exception as e:
+        result["status"] = "ERROR: can't get article data for id " + id
+        result["data"] = None
+    return jsonify(result)
+"""
+# route to get articles
+@fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
+def get_articles(type, value):
+    if type not in ["time", "authors", "categories", "scopes"]:
+        return jsonify(status="ERROR: can't get articles of type " + type)
+    (status, articles) = get_articles_by(type, value)
+    return jsonify(status=status, articles=articles)
+
+#route to get options for a browse search
+@fetcher.route("/get_options/<string:type>/", methods=["GET"])
+def get_options(type):
+    if type not in ["time", "authors", "categories", "scopes"]:
+        return jsonify(status="ERROR: can't get options of type " + type)
+    (status, options) = get_options_data(type)
+    return jsonify(status=status, options=options)
+
+#route to get articles sorted by title
+@fetcher.route("/get_ordered_titles/", methods=["GET"])
+def get_ordered_titles():
+    (status, result) = get_ordered_titles_data()
+    return jsonify(status=status, result=result)
+
+#the "clutch" call
+@fetcher.route("/load_app/", methods=["GET"])
+def load_app():
+    data = {}
+    status = "SUCCESS"
+
+    try:
+        data["articles"] = get_articles_by("time", "null")[1]
+    except Exception as e:
+        status = "ERROR: can't fetch time ordered articles"
+
+    try:
+        data["titles"] = get_ordered_titles_data()[1]
+    except Exception as e:
+        status = "ERROR: can't fetch ordered titles"
+
+    try:
+        for option in ["time", "authors", "categories", "scopes"]:
+            data[option] = get_options_data(option)[1]
+    except Exception as e:
+        status = "ERROR: can't fetch browsing options"
+
+    return jsonify(status=status, data=data)
+"""
+
+app.register_blueprint(fetcher)
 
 if __name__ == '__main__':
     app.debug = True
