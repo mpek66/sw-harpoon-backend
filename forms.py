@@ -31,6 +31,6 @@ class EditArticleForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
 
 class RemoveArticleForm(FlaskForm):
-    id = StringField("Id", validators=[DataRequired()])
+    id = IntegerField("Id", validators=[DataRequired()])
     name = StringField("Name", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
