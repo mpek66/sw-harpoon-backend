@@ -126,11 +126,16 @@ def remove_article():
     if form.validate_on_submit():
         if form.name.data != get_credential_name() or form.password.data != get_credential_password():
             return render_template("/remove_article.html", form=form)
-        status = server.remove_article(form)
-        if status == "SUCCESS":
-            return redirect(url_for("manager.success"))
-        else:
-            return redirect(url_for("manager.errors", errors=status))
+        try:
+            article = Article.query.get(form.id.data)
+            db.session.delete(article)
+            db.session.commit()
+        except Exception as e:
+            print("\n FAILED entry: {}\n".format(json.dumps(form.data)))
+            print(e)
+            sys.stdout.flush()
+            return redirect(url_for("manager.errors", errors="\n FAILED entry: {}\n".format(json.dumps(form.data))))
+        return redirect(url_for("manager.success"))
     return render_template("/remove_article.html", form=form)
 
 @manager.route("/success/", methods=["GET"])
