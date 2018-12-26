@@ -5,7 +5,7 @@
     <body>
       <h1>View Articles</h1>
       {% for article in articles %}
-      <p>{{article}}</p>
+      <p>{{article.id}} = {{article.title}}</p>
       {% endfor %}
       <form action="/manage/">
         <button>Back to Manage</button>
