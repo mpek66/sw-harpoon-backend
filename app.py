@@ -108,7 +108,9 @@ def edit_article():
             return render_template("/edit_article.html", form=form)
         try:
             article = Article.query.get(form.id.data)
-            
+            for key in form.data:
+                if key != "id" and key != "csrf_token" and form[key].data != "" and form[key].data != None:
+                    setattr(article, key, form[key].data)
             db.session.commit()
         except Exception as e:
             print("\n FAILED entry: {}\n".format(json.dumps(form.data)))
