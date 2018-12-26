@@ -129,7 +129,7 @@ def remove_article():
         try:
             article = Article.query.get(form.id.data)
             db.session.delete(article)
-            decrements = Article.query.filter(id > form.id.data).order_by(id.asc())
+            decrements = Article.query.filter(Article.id > form.id.data).order_by(id.asc())
             for item in decrements:
                 item.id -= 1
             db.session.commit()
