@@ -52,7 +52,7 @@ class Article(db.Model):
     location = db.Column(db.Text())
     article = db.Column(db.Text())
 
-    def __repr__():
+    def __repr__(self):
         return self.title
 
     def __init__(self, data):
