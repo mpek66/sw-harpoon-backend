@@ -39,7 +39,7 @@ class Article(db.Model):
         self.caption = data['caption']
         self.location = data['location']
         self.article = data['article']
-        self.categoty = data['category']
+        self.category = data['category']
         self.scope = data['scope']
 
 #managing articles in the database
