@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, url_for, request
+from flask import Flask, Blueprint, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 
