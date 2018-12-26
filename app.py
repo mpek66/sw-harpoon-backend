@@ -41,7 +41,7 @@ def post_to_db():
 def enter_data():
     return render_template("dataentry.html")
 
-class Articles(db.Model):
+class Article(db.Model):
     __tablename__ = "articles"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text(), primary_key=True)
