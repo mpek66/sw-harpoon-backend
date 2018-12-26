@@ -2,6 +2,7 @@ Click==7.0
 Flask==1.0.2
 flask-heroku==0.1.9
 Flask-SQLAlchemy==2.3.2
+Flask-WTF==0.14.2
 gunicorn==19.9.0
 itsdangerous==1.1.0
 Jinja2==2.10
@@ -9,3 +10,4 @@ MarkupSafe==1.1.0
 psycopg2==2.7.6.1
 SQLAlchemy==1.2.15
 Werkzeug==0.14.1
+WTForms==2.2.1
