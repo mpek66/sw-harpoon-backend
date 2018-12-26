@@ -109,7 +109,7 @@ def edit_article():
         try:
             article = Article.query.get(form.id.data)
             for key in form.data:
-                if key != "id" and form[key].data != "" and form[key].data != None:
+                if key != "id" key != "csrf_token" and form[key].data != "" and form[key].data != None:
                     article[key] = form[key].data
             db.session.commit()
         except Exception as e:
