@@ -43,7 +43,8 @@ def enter_data():
 
 class Article(db.Model):
     __tablename__ = "articles"
-    title = db.Column(db.Text(), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text())
     date = db.Column(db.Text())
     author = db.Column(db.Text())
     image = db.Column(db.Text())
