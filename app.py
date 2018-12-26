@@ -74,7 +74,7 @@ def manage():
 
 @manager.route("/view_articles/")
 def view_articles():
-    data = Article.query.all()
+    data = Article.query.order_by(Article.id).all()
     return str(data)
 
 @manager.route("/add_article/", methods=["GET", "POST"])
