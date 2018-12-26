@@ -152,7 +152,6 @@ def get_article_data(id):
         article = Article.query.get(id)
         result["status"] = "SUCCESS"
         result["data"] = {
-            "status": "SUCCESS",
             "id": article.id,
             "title": article.title,
             "date": article.date,
@@ -167,14 +166,48 @@ def get_article_data(id):
         result["status"] = "ERROR: can't get article data for id " + id
         result["data"] = None
     return jsonify(result)
-"""
+
 # route to get articles
 @fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
 def get_articles(type, value):
-    if type not in ["time", "authors", "categories", "scopes"]:
-        return jsonify(status="ERROR: can't get articles of type " + type)
-    (status, articles) = get_articles_by(type, value)
-    return jsonify(status=status, articles=articles)
+    result = {
+        "status": None,
+        "data": None
+    }
+    if type not in ["time", "author", "category", "scope"]:
+        result["status"] = "ERROR: ''" + type + "'' is not a valid query type"
+        result["data"] = None
+        return jsonify(result)
+    try:
+        articles = None
+        if type == "time":
+            #TODO: Make 'time' a datetime object for all articles to make this easier
+            articles = Article.query.order_by(Article.id.desc()).all()
+        elif type == "author":
+            articles = Article.query.filter(Article.author = value).order_by(Article.id.desc()).all()
+        elif type = "category":
+            articles = Article.query.filter(Article.category = value).order_by(Article.id.desc()).all()
+        elif type = "scope":
+            articles = Article.query.filter(Article.scope = value).order_by(Article.id.desc()).all()
+        result["status"] = "SUCCESS"
+        result["data"] = []
+        for article in articles:
+            itemdata = {
+                "id": article.id,
+                "title": article.title,
+                "date": article.date,
+                "author": article.author,
+                "image": article.image,
+                "caption": article.caption,
+                "article": article.article,
+                "category": article.category,
+                "scope": article.scope
+            }
+            result["data"].append(itemdata)
+    except Exception as e:
+        result["status"] = "ERROR: can't get articles of type '" + type + "' and value '" + value + "'"
+        result["data"] = None
+    return jsonify(result)
 
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
