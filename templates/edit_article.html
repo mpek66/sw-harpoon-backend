@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Edit Article Page</title>
+    </head>
+    <body>
+        <form action="{{ url_for('manager.edit_article') }}" method="post" accept-charset="UTF-8">
+            <h1>Article ID</h1>
+              <input type="number" name="id" />
+              <h1>Article Data</h1>
+                <p>Title</p>
+                <input type="text" name="title" />
+                <p>Date</p>
+                <input type="text" name="date" />
+                <p>Author</p>
+                <input type="text" name="author" />
+                <p>Image</p>
+                <textarea name="image"></textarea>
+                <p>Caption</p>
+                <input type="text" name="caption" />
+                <p>Location</p>
+                <input type="text" name="location" />
+                <p>Article</p>
+                <textarea name="article"></textarea>
+            <h1>Meta Data</h2>
+              <p>Category</p>
+              <input type="radio" name="category" value="culture">Culture
+              <input type="radio" name="category" value="economics">Economics
+              <input type="radio" name="category" value="entertainment">Entertainment
+              <input type="radio" name="category" value="politics">Politics
+              <input type="radio" name="category" value="school">School
+              <input type="radio" name="category" value="science">Science
+              <p>Scope</p>
+              <input type="radio" name="scope" value="local">Local
+              <input type="radio" name="scope" value="state">State
+              <input type="radio" name="scope" value="national">National
+              <input type="radio" name="scope" value="international">International
+            <h1>Credential Data</h1>
+              <p>Name</p>
+              <input type="text" name="name" />
+              <p>Password</p>
+              <input type="password" name="password" />
+            {{ form.csrf_token }}
+            </br></br>
+            <button type="submit">Submit</button>
+        </form>
+        <form action="/manage/">
+          <h1>Cancel</h1>
+          <button>Back to Manage</button>
+        </form>
+    </body>
+</html>
