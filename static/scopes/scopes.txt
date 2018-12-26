@@ -1,4 +1,0 @@
-international
-local
-national
-state
