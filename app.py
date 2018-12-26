@@ -70,9 +70,12 @@ def get_credential_password():
 
 @manager.route("/manage/", methods=["GET", "POST"])
 def manage():
-    data = Article.query()
-    print(data)
     return render_template("/manage.html")
+
+@manager.route("/view_articles/")
+def view_articles():
+    data = Article.query()
+    return string(data)
 
 @manager.route("/add_article/", methods=["GET", "POST"])
 def add_article():
