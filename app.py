@@ -66,6 +66,8 @@ def add_article():
         last = Article.query.order_by(Article.id.desc()).first()
         if last:
             indata.id = last.id + 1
+        else:
+            indata.id = 1
         try:
             db.session.add(indata)
             db.session.commit()
