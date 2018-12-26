@@ -52,6 +52,9 @@ class Article(db.Model):
     location = db.Column(db.Text())
     article = db.Column(db.Text())
 
+    def __repr__():
+        return self.title
+
     def __init__(self, data):
         self.title = data['title']
         self.date = data['date']
