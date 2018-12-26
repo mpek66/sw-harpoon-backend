@@ -25,6 +25,8 @@ class Article(db.Model):
     caption = db.Column(db.Text())
     location = db.Column(db.Text())
     article = db.Column(db.Text())
+    category = db.Column(db.Text())
+    scope = db.Column(db.Text())
 
     def __repr__(self):
         return self.title
@@ -37,6 +39,8 @@ class Article(db.Model):
         self.caption = data['caption']
         self.location = data['location']
         self.article = data['article']
+        self.categoty = data['category']
+        self.scope = data['scope']
 
 #managing articles in the database
 manager = Blueprint("manager", __name__, template_folder='templates')
