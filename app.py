@@ -184,11 +184,11 @@ def get_articles(type, value):
             #TODO: Make 'time' a datetime object for all articles to make this easier
             articles = Article.query.order_by(Article.id.desc()).all()
         elif type == "author":
-            articles = Article.query.filter(Article.author = value).order_by(Article.id.desc()).all()
-        elif type = "category":
-            articles = Article.query.filter(Article.category = value).order_by(Article.id.desc()).all()
-        elif type = "scope":
-            articles = Article.query.filter(Article.scope = value).order_by(Article.id.desc()).all()
+            articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
+        elif type == "category":
+            articles = Article.query.filter(Article.category == value).order_by(Article.id.desc()).all()
+        elif type == "scope":
+            articles = Article.query.filter(Article.scope == value).order_by(Article.id.desc()).all()
         result["status"] = "SUCCESS"
         result["data"] = []
         for article in articles:
@@ -209,6 +209,7 @@ def get_articles(type, value):
         result["data"] = None
     return jsonify(result)
 
+"""
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
 def get_options(type):
