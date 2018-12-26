@@ -43,7 +43,6 @@ def enter_data():
 
 class Article(db.Model):
     __tablename__ = "articles"
-    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text(), primary_key=True)
     date = db.Column(db.Text())
     author = db.Column(db.Text())
