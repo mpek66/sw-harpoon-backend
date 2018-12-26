@@ -113,10 +113,10 @@ def edit_article():
                     article[key] = form[key].data
             db.session.commit()
         except Exception as e:
-            print("\n FAILED entry: {}\n".format(json.dumps(data)))
+            print("\n FAILED entry: {}\n".format(json.dumps(article)))
             print(e)
             sys.stdout.flush()
-            return redirect(url_for("manager.errors", errors="\n FAILED entry: {}\n".format(json.dumps(data))))
+            return redirect(url_for("manager.errors", errors="\n FAILED entry: {}\n".format(json.dumps(article))))
         return redirect(url_for("manager.success"))
     return render_template("/edit_article.html", form=form)
 
