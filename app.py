@@ -63,6 +63,9 @@ def add_article():
         indata = Article(form.data)
         data = copy(indata.__dict__)
         del data["_sa_instance_state"]
+        last = Article.query.order_by(Article.id.desc).first()
+        if last:
+            data.id = last.id + 1
         try:
             db.session.add(indata)
             db.session.commit()
