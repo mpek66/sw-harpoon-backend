@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, Flask, redirect, request, url_for, render_template
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, IntegerField, PasswordField
 from wtforms.validators import DataRequired
 
 class ArticleForm(FlaskForm):
@@ -17,7 +17,7 @@ class ArticleForm(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
 
 class EditArticleForm(FlaskForm):
-    id = StringField("Id", validators=[DataRequired()])
+    id = IntegerField("Id", validators=[DataRequired()])
     title = StringField("Title", validators=[DataRequired()])
     date = StringField("Date", validators=[DataRequired()])
     author = StringField("Author", validators=[DataRequired()])
