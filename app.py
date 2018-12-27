@@ -212,7 +212,7 @@ def get_articles(type, value):
             result["data"].append(itemdata)
     except Exception as e:
         result["status"] = "ERROR: can't get articles of type '" + type + "' and value '" + value + "'"
-        result["data"] = None
+        result["data"] = repr(e)
     return jsonify(result)
 
 """
