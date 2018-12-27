@@ -242,13 +242,13 @@ def get_options(type):
             options = ["Weekly", "Monthly", "Yearly", "All Time"]
         elif type == "author":
             for option in Article.query.distinct(Article.author):
-                options.append(option)
+                options.append(option.author)
         elif type == "category":
-            for option in Article.query.distinct(Article.author):
-                options.append(option)
+            for option in Article.query.distinct(Article.category):
+                options.append(option.category)
         elif type == "scope":
-            for option in Article.query.distinct(Article.author):
-                options.append(option)
+            for option in Article.query.distinct(Article.scope):
+                options.append(option.scope)
         result["status"] = "SUCCESS"
         result["data"] = options
         return jsonify(result)
