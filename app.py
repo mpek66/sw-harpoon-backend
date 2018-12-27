@@ -190,10 +190,10 @@ def get_articles(type, value):
                 cutoff = today - datetime.timedelta(days=7)
                 articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
             elif value == "monthly":
-                cutoff = today - datetime.timedelta(months=1)
+                cutoff = today.replace(day=1)
                 articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
             elif value == "yearly":
-                cutoff = today - datetime.timedelta(years=1)
+                cutoff = today - datetime.timedelta(days=365)
                 articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
             else:
                 articles = Article.query.order_by(Article.date.desc()).all()
