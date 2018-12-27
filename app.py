@@ -237,7 +237,7 @@ def get_options(type):
         result["data"] = None
         return result
     try:
-        options = None
+        options = []
         if type == "time":
             options = ["Weekly", "Monthly", "Yearly", "All Time"]
         elif type == "author":
