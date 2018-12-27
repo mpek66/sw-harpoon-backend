@@ -180,7 +180,7 @@ def get_articles(type, value):
     }
     if type not in ["time", "author", "category", "scope"]:
         result["status"] = "ERROR: '" + type + "' is not a valid query type"
-        result["data"] = None
+        result["data"] = repr(e)
         return jsonify(result)
     try:
         articles = None
@@ -188,7 +188,7 @@ def get_articles(type, value):
             today = datetime.date.today()
             if value == "weekly":
                 cutoff = today - datetime.timedelta(days=7)
-                articles = Article.query.filter(Article.date >= cutoff).order_by(Article.date).all()
+                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date).all()
         elif type == "author":
             articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
         elif type == "category":
