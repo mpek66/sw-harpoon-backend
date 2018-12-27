@@ -7,6 +7,7 @@ from forms import ArticleForm, EditArticleForm, RemoveArticleForm
 import sys
 from copy import copy
 import json
+import datetime
 
 app = Flask(__name__, static_url_path="/static")
 app.secret_key = "lkj()984kljl;:LKJF?.a<faskdjkl"
@@ -170,6 +171,9 @@ def get_article_data(id):
 # route to get articles
 @fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
 def get_articles(type, value):
+    #some standardization to input
+    type = type.lower()
+    value = value.lower()
     result = {
         "status": None,
         "data": None
@@ -181,8 +185,10 @@ def get_articles(type, value):
     try:
         articles = None
         if type == "time":
-            #TODO: Make 'time' a datetime object for all articles to make this easier
-            articles = Article.query.order_by(Article.id.desc()).all()
+            today = datetime.date.today()
+            if value == "weekly":
+                cutoff = today - datetime.timedelta(days=7)
+                articles = Article.query.filter(Article.date >= cutoff).order_by(Article.date).all()
         elif type == "author":
             articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
         elif type == "category":
