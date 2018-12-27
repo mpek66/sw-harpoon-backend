@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, Flask, redirect, request, url_for, render_template
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField
+from wtforms import StringField, IntegerField, PasswordField, DateField
 from wtforms.validators import DataRequired
 
 class ArticleForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
-    date = StringField("Date", validators=[DataRequired()])
+    date = DateField("Date", format='%m/%d/%Y', validators=[DataRequired()])
     author = StringField("Author", validators=[DataRequired()])
     image = StringField("Image", validators=[DataRequired()])
     caption = StringField("Caption", validators=[DataRequired()])
@@ -19,7 +19,7 @@ class ArticleForm(FlaskForm):
 class EditArticleForm(FlaskForm):
     id = IntegerField("Id", validators=[DataRequired()])
     title = StringField("Title")
-    date = StringField("Date")
+    date = DateField("Date", format='%m/%d/%Y')
     author = StringField("Author")
     image = StringField("Image")
     caption = StringField("Caption")

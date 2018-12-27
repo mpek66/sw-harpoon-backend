@@ -19,7 +19,7 @@ class Article(db.Model):
     __tablename__ = "articles"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text())
-    date = db.Column(db.Text())
+    date = db.Column(db.Date())
     author = db.Column(db.Text())
     image = db.Column(db.Text())
     caption = db.Column(db.Text())
@@ -175,7 +175,7 @@ def get_articles(type, value):
         "data": None
     }
     if type not in ["time", "author", "category", "scope"]:
-        result["status"] = "ERROR: ''" + type + "'' is not a valid query type"
+        result["status"] = "ERROR: '" + type + "' is not a valid query type"
         result["data"] = None
         return jsonify(result)
     try:
