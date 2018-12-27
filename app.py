@@ -163,10 +163,11 @@ def get_article_data(id):
             "category": article.category,
             "scope": article.scope
         }
+        return jsonify(result)
     except Exception as e:
         result["status"] = "ERROR: can't get article data for id " + id
         result["data"] = repr(e)
-    return jsonify(result)
+        return jsonify(result)
 
 # route to get articles
 @fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
@@ -218,10 +219,11 @@ def get_articles(type, value):
                 "scope": article.scope
             }
             result["data"].append(itemdata)
+        return jsonify(result)
     except Exception as e:
         result["status"] = "ERROR: can't get articles of type '" + type + "' and value '" + value + "'"
         result["data"] = repr(e)
-    return jsonify(result)
+        return jsonify(result)
 
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
@@ -239,17 +241,21 @@ def get_options(type):
         if type == "time":
             options = ["Weekly", "Monthly", "Yearly", "All Time"]
         elif type == "author":
-            options = Article.query.distinct(Article.author)
+            for option in Article.query.distinct(Article.author):
+                options.append(option)
         elif type == "category":
-            options = Article.query.distinct(Article.category)
+            for option in Article.query.distinct(Article.author):
+                options.append(option)
         elif type == "scope":
-            options = Article.query.distinct(Article.scope)
+            for option in Article.query.distinct(Article.author):
+                options.append(option)
         result["status"] = "SUCCESS"
         result["data"] = options
+        return jsonify(result)
     except Exception as e:
         result["status"] = "ERROR: can't get options of type '" + type + "'"
         result["data"] = repr(e)
-    return jsonify(result)
+        return jsonify(result)
 """
 #route to get articles sorted by title
 @fetcher.route("/get_ordered_titles/", methods=["GET"])
