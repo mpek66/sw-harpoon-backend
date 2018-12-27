@@ -165,7 +165,7 @@ def get_article_data(id):
         }
     except Exception as e:
         result["status"] = "ERROR: can't get article data for id " + id
-        result["data"] = None
+        result["data"] = repr(e)
     return jsonify(result)
 
 # route to get articles
@@ -180,7 +180,7 @@ def get_articles(type, value):
     }
     if type not in ["time", "author", "category", "scope"]:
         result["status"] = "ERROR: '" + type + "' is not a valid query type"
-        result["data"] = repr(e)
+        result["data"] = None
         return jsonify(result)
     try:
         articles = None
@@ -188,7 +188,15 @@ def get_articles(type, value):
             today = datetime.date.today()
             if value == "weekly":
                 cutoff = today - datetime.timedelta(days=7)
-                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date).all()
+                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+            elif value == "monthly":
+                cutoff = today - datetime.timedelta(months=1)
+                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+            elif value == "yearly":
+                cutoff = today - datetime.timedelta(years=1)
+                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+            else:
+                articles = Article.query.order_by(Article.date.desc()).all()
         elif type == "author":
             articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
         elif type == "category":
