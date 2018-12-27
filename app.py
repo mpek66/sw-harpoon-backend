@@ -239,11 +239,11 @@ def get_options(type):
         if type == "time":
             options = ["Weekly", "Monthly", "Yearly", "All Time"]
         elif type == "author":
-            options = Article.query(Article.author).distinct()
+            options = Article.query.distinct(Article.author)
         elif type == "category":
-            options = Article.query(Article.category).distinct()
+            options = Article.query.distinct(Article.category)
         elif type == "scope":
-            options = Article.query(Article.scope).distinct()
+            options = Article.query.distinct(Article.scope)
         result["status"] = "SUCCESS"
         result["data"] = options
     except Exception as e:
