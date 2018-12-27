@@ -223,15 +223,34 @@ def get_articles(type, value):
         result["data"] = repr(e)
     return jsonify(result)
 
-"""
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
 def get_options(type):
-    if type not in ["time", "authors", "categories", "scopes"]:
-        return jsonify(status="ERROR: can't get options of type " + type)
-    (status, options) = get_options_data(type)
-    return jsonify(status=status, options=options)
-
+    result = {
+        "status": None,
+        "data": None
+    }
+    if type not in ["time", "author", "category", "scope"]:
+        result["status"] = "ERROR: '" + type + "' is not a valid option type"
+        result["data"] = None
+        return result
+    try:
+        options = None
+        if type == "time":
+            options = ["Weekly", "Monthly", "Yearly", "All Time"]
+        elif type == "author":
+            options = Article.query(Article.author).distinct()
+        elif type == "category":
+            options = Article.query(Article.category).distinct()
+        elif type == "scope":
+            options = Article.query(Article.scope).distinct()
+        result["status"] = "SUCCESS"
+        result["data"] = options
+    except Exception as e:
+        result["status"] = "ERROR: can't get options of type '" + type + "'"
+        result["data"] = repr(e)
+    return jsonify(result)
+"""
 #route to get articles sorted by title
 @fetcher.route("/get_ordered_titles/", methods=["GET"])
 def get_ordered_titles():
