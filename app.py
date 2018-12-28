@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
-from SQLAlchemy import func
+from sqlalchemy import func
 
 from forms import ArticleForm, EditArticleForm, RemoveArticleForm
 
