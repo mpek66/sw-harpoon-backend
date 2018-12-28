@@ -169,6 +169,45 @@ def get_article_data(id):
         result["data"] = repr(e)
         return jsonify(result)
 
+def get_articles_data(type, value):
+    articles = None
+    if type == "id":
+        articles = Article.query.order_by(Article.id.desc()).all():
+    elif type == "time":
+        today = datetime.date.today()
+        if value == "weekly":
+            cutoff = today - datetime.timedelta(days=7)
+            articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+        elif value == "monthly":
+            cutoff = today.replace(day=1)
+            articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+        elif value == "yearly":
+            cutoff = today - datetime.timedelta(days=365)
+            articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
+        else:
+            articles = Article.query.order_by(Article.date.desc()).all()
+    elif type == "author":
+        articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
+    elif type == "category":
+        articles = Article.query.filter(Article.category == value).order_by(Article.id.desc()).all()
+    elif type == "scope":
+        articles = Article.query.filter(Article.scope == value).order_by(Article.id.desc()).all()
+    data = []
+    for article in articles:
+        itemdata = {
+            "id": article.id,
+            "title": article.title,
+            "date": article.date,
+            "author": article.author,
+            "image": article.image,
+            "caption": article.caption,
+            "article": article.article,
+            "category": article.category,
+            "scope": article.scope
+        }
+        data.append(itemdata)
+    return data
+
 # route to get articles
 @fetcher.route("/get_articles/<string:type>/<string:value>/", methods=["GET"])
 def get_articles(type, value):
@@ -179,51 +218,33 @@ def get_articles(type, value):
         "status": None,
         "data": None
     }
-    if type not in ["time", "author", "category", "scope"]:
+    if type not in ["time", "author", "category", "scope", "id"]:
         result["status"] = "ERROR: '" + type + "' is not a valid query type"
         result["data"] = None
         return jsonify(result)
     try:
-        articles = None
-        if type == "time":
-            today = datetime.date.today()
-            if value == "weekly":
-                cutoff = today - datetime.timedelta(days=7)
-                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
-            elif value == "monthly":
-                cutoff = today.replace(day=1)
-                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
-            elif value == "yearly":
-                cutoff = today - datetime.timedelta(days=365)
-                articles = Article.query.filter(Article.date >= str(cutoff)).order_by(Article.date.desc()).all()
-            else:
-                articles = Article.query.order_by(Article.date.desc()).all()
-        elif type == "author":
-            articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
-        elif type == "category":
-            articles = Article.query.filter(Article.category == value).order_by(Article.id.desc()).all()
-        elif type == "scope":
-            articles = Article.query.filter(Article.scope == value).order_by(Article.id.desc()).all()
+        result["data"] = get_articles_data(type, value)
         result["status"] = "SUCCESS"
-        result["data"] = []
-        for article in articles:
-            itemdata = {
-                "id": article.id,
-                "title": article.title,
-                "date": article.date,
-                "author": article.author,
-                "image": article.image,
-                "caption": article.caption,
-                "article": article.article,
-                "category": article.category,
-                "scope": article.scope
-            }
-            result["data"].append(itemdata)
         return jsonify(result)
     except Exception as e:
         result["status"] = "ERROR: can't get articles of type '" + type + "' and value '" + value + "'"
         result["data"] = repr(e)
         return jsonify(result)
+
+def get_options_data(type):
+    options = []
+    if type == "time":
+        options = ["Weekly", "Monthly", "Yearly", "All Time"]
+    elif type == "author":
+        for option in Article.query.distinct(Article.author):
+            options.append(option.author)
+    elif type == "category":
+        for option in Article.query.distinct(Article.category):
+            options.append(option.category)
+    elif type == "scope":
+        for option in Article.query.distinct(Article.scope):
+            options.append(option.scope)
+    return options
 
 #route to get options for a browse search
 @fetcher.route("/get_options/<string:type>/", methods=["GET"])
@@ -237,18 +258,7 @@ def get_options(type):
         result["data"] = None
         return result
     try:
-        options = []
-        if type == "time":
-            options = ["Weekly", "Monthly", "Yearly", "All Time"]
-        elif type == "author":
-            for option in Article.query.distinct(Article.author):
-                options.append(option.author)
-        elif type == "category":
-            for option in Article.query.distinct(Article.category):
-                options.append(option.category)
-        elif type == "scope":
-            for option in Article.query.distinct(Article.scope):
-                options.append(option.scope)
+        options = get_options_data(type)
         result["status"] = "SUCCESS"
         result["data"] = options
         return jsonify(result)
@@ -256,6 +266,23 @@ def get_options(type):
         result["status"] = "ERROR: can't get options of type '" + type + "'"
         result["data"] = repr(e)
         return jsonify(result)
+
+def get_ordered_titles_data():
+    data = []
+    for article in Article.query.order_by(Article.title).all():
+        itemdata = {
+            "id": article.id,
+            "title": article.title,
+            "date": article.date,
+            "author": article.author,
+            "image": article.image,
+            "caption": article.caption,
+            "article": article.article,
+            "category": article.category,
+            "scope": article.scope
+        }
+        data.append(itemdata)
+    return data
 
 #route to get articles sorted by title
 @fetcher.route("/get_ordered_titles/", methods=["GET"])
@@ -265,20 +292,7 @@ def get_ordered_titles():
         "data": None
     }
     try:
-        result["data"] = []
-        for article in Article.query.order_by(Article.title).all():
-            itemdata = {
-                "id": article.id,
-                "title": article.title,
-                "date": article.date,
-                "author": article.author,
-                "image": article.image,
-                "caption": article.caption,
-                "article": article.article,
-                "category": article.category,
-                "scope": article.scope
-            }
-            result["data"].append(itemdata)
+        result["data"] = get_ordered_titles_data()
         result["status"] = "SUCCESS"
         return jsonify(result)
     except Exception as e:
@@ -299,22 +313,10 @@ def load_app():
             "titles": [],
             "options": {}
         }
-        for article in Article.query.order_by(Article.id.desc()).all():
-            itemdata = {
-                "id": article.id,
-                "title": article.title,
-                "date": article.date,
-                "author": article.author,
-                "image": article.image,
-                "caption": article.caption,
-                "article": article.article,
-                "category": article.category,
-                "scope": article.scope
-            }
-            result["data"]["articles"].append(itemdata)
-        result["data"]["titles"] = get_ordered_titles()["data"]
+        result["data"]["articles"] = get_articles_data("id", "null")
+        result["data"]["titles"] = get_ordered_titles_data()
         for option in ["time", "authors", "categories", "scopes"]:
-            result["data"]["options"][option] = get_options(option)["data"]
+            result["data"]["options"][option] = get_options_data(option)
         result["status"] = "SUCCESS"
         return jsonify(result)
     except Exception as e:
