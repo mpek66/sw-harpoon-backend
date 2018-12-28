@@ -315,7 +315,7 @@ def load_app():
         }
         result["data"]["articles"] = get_articles_data("id", "null")
         result["data"]["titles"] = get_ordered_titles_data()
-        for option in ["time", "authors", "categories", "scopes"]:
+        for option in ["time", "author", "category", "scope"]:
             result["data"]["options"][option] = get_options_data(option)
         result["status"] = "SUCCESS"
         return jsonify(result)
