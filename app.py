@@ -267,7 +267,18 @@ def get_ordered_titles():
     try:
         result["data"] = []
         for article in Article.query.order_by(Article.title).all():
-            result["data"].append(article)
+            itemdata = {
+                "id": article.id,
+                "title": article.title,
+                "date": article.date,
+                "author": article.author,
+                "image": article.image,
+                "caption": article.caption,
+                "article": article.article,
+                "category": article.category,
+                "scope": article.scope
+            }
+            result["data"].append(itemdata)
         result["status"] = "SUCCESS"
         return jsonify(result)
     except Exception as e:
