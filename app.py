@@ -286,31 +286,41 @@ def get_ordered_titles():
         result["data"] = repr(e)
         return jsonify(result)
 
-"""
 #the "clutch" call
 @fetcher.route("/load_app/", methods=["GET"])
 def load_app():
-    data = {}
-    status = "SUCCESS"
-
+    result = {
+        "status": None,
+        "data": None
+    }
     try:
-        data["articles"] = get_articles_by("time", "null")[1]
-    except Exception as e:
-        status = "ERROR: can't fetch time ordered articles"
-
-    try:
-        data["titles"] = get_ordered_titles_data()[1]
-    except Exception as e:
-        status = "ERROR: can't fetch ordered titles"
-
-    try:
+        result["data"] = {
+            "articles": [],
+            "titles": [],
+            "options": {}
+        }
+        for article in Article.query.order_by(Article.id.desc()).all():
+            itemdata = {
+                "id": article.id,
+                "title": article.title,
+                "date": article.date,
+                "author": article.author,
+                "image": article.image,
+                "caption": article.caption,
+                "article": article.article,
+                "category": article.category,
+                "scope": article.scope
+            }
+            result["data"]["articles"].append(itemdata)
+        result["data"]["titles"] = get_ordered_titles()["data"]
         for option in ["time", "authors", "categories", "scopes"]:
-            data[option] = get_options_data(option)[1]
+            result["data"]["options"][option] = get_options(option)["data"]
+        result["status"] = "SUCCESS"
+        return jsonify(result)
     except Exception as e:
-        status = "ERROR: can't fetch browsing options"
-
-    return jsonify(status=status, data=data)
-"""
+        result["status"] = "ERROR: can't load app"
+        result["data"] = repr(e)
+        return jsonify(result)
 
 app.register_blueprint(fetcher)
 
