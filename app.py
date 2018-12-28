@@ -256,13 +256,26 @@ def get_options(type):
         result["status"] = "ERROR: can't get options of type '" + type + "'"
         result["data"] = repr(e)
         return jsonify(result)
-"""
+
 #route to get articles sorted by title
 @fetcher.route("/get_ordered_titles/", methods=["GET"])
 def get_ordered_titles():
-    (status, result) = get_ordered_titles_data()
-    return jsonify(status=status, result=result)
+    result = {
+        "status": None,
+        "data": None
+    }
+    try:
+        result["data"] = []
+        for article in Article.query.order_by(Article.title).all():
+            result["data"].append(article)
+        result["status"] = "SUCCESS"
+        return jsonify(result)
+    except Exception as e:
+        result["status"] = "ERROR: can't get articles sorted by title"
+        result["data"] = repr(e)
+        return jsonify(result)
 
+"""
 #the "clutch" call
 @fetcher.route("/load_app/", methods=["GET"])
 def load_app():
