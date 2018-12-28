@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, render_template, url_for, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
+from SQLAlchemy import func
 
 from forms import ArticleForm, EditArticleForm, RemoveArticleForm
 
@@ -187,11 +188,11 @@ def get_articles_data(type, value):
         else:
             articles = Article.query.order_by(Article.date.desc()).all()
     elif type == "author":
-        articles = Article.query.filter(Article.author == value).order_by(Article.id.desc()).all()
+        articles = Article.query.filter(func.lower(Article.author) == value).order_by(Article.id.desc()).all()
     elif type == "category":
-        articles = Article.query.filter(Article.category == value).order_by(Article.id.desc()).all()
+        articles = Article.query.filter(func.lower(Article.category) == value).order_by(Article.id.desc()).all()
     elif type == "scope":
-        articles = Article.query.filter(Article.scope == value).order_by(Article.id.desc()).all()
+        articles = Article.query.filter(func.lower(Article.scope) == value).order_by(Article.id.desc()).all()
     data = []
     for article in articles:
         itemdata = {
