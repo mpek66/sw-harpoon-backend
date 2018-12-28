@@ -172,7 +172,7 @@ def get_article_data(id):
 def get_articles_data(type, value):
     articles = None
     if type == "id":
-        articles = Article.query.order_by(Article.id.desc()).all():
+        articles = Article.query.order_by(Article.id.desc()).all()
     elif type == "time":
         today = datetime.date.today()
         if value == "weekly":
