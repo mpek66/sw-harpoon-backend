@@ -156,10 +156,11 @@ def get_article_data(id):
         result["data"] = {
             "id": article.id,
             "title": article.title,
-            "date": article.date,
+            "date": article.date.strftime("%B %d, %Y"),
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
+            "location": article.caption,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
@@ -202,6 +203,7 @@ def get_articles_data(type, value):
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
+            "location": article.caption,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
@@ -274,10 +276,11 @@ def get_ordered_titles_data():
         itemdata = {
             "id": article.id,
             "title": article.title,
-            "date": article.date,
+            "date": article.date.strftime("%B %d, %Y"),
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
+            "location": article.caption,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
