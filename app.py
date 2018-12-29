@@ -198,7 +198,7 @@ def get_articles_data(type, value):
         itemdata = {
             "id": article.id,
             "title": article.title,
-            "date": str(article.date),
+            "date": article.date.strf("%B %d, %Y"),
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
