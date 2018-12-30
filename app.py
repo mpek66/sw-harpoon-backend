@@ -160,7 +160,7 @@ def get_article_data(id):
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
-            "location": article.caption,
+            "location": article.location,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
@@ -203,7 +203,7 @@ def get_articles_data(type, value):
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
-            "location": article.caption,
+            "location": article.location,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
@@ -280,7 +280,7 @@ def get_ordered_titles_data():
             "author": article.author,
             "image": article.image,
             "caption": article.caption,
-            "location": article.caption,
+            "location": article.location,
             "article": article.article,
             "category": article.category,
             "scope": article.scope
