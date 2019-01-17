@@ -48,9 +48,9 @@ class Article(db.Model):
 #Database management
 manager = Blueprint("manager", __name__, template_folder='templates')
 def get_credential_name():
-    return "test"
+    return "harpoon@admin"
 def get_credential_password():
-    return "test"
+    return "#1shot_harpoon"
 
 @manager.route("/manage/", methods=["GET", "POST"])
 def manage():
